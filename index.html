@@ -434,7 +434,7 @@
   }
 
   function init() {
-    const entries = loadData();
+    const entries = loadData().sort((a, b) => a.date > b.date ? 1 : -1);
     renderCards(entries);
     renderProgress(entries);
     renderWeightChart(entries);
