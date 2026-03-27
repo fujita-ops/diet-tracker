@@ -386,33 +386,59 @@
     const labels = entries.map(e => formatDate(e.date));
     const deficits = entries.map(e => e.deficit ?? (e.burn - e.intake));
     const colors = deficits.map(d => d >= 0 ? 'rgba(66,153,225,0.8)' : 'rgba(229,62,62,0.8)');
+    const cumulative = deficits.reduce((acc, d) => {
+      acc.push((acc.length ? acc[acc.length - 1] : 0) + d);
+      return acc;
+    }, []);
 
     if (deficitChart) deficitChart.destroy();
     deficitChart = new Chart(ctx, {
       type: 'bar',
       data: {
         labels,
-        datasets: [{
-          label: 'カロリー赤字 (kcal)',
-          data: deficits,
-          backgroundColor: colors,
-          borderRadius: 4,
-        }]
+        datasets: [
+          {
+            label: '日別赤字 (kcal)',
+            data: deficits,
+            backgroundColor: colors,
+            borderRadius: 4,
+            yAxisID: 'y',
+          },
+          {
+            label: '累計赤字 (kcal)',
+            data: cumulative,
+            type: 'line',
+            borderColor: '#e67e22',
+            backgroundColor: 'rgba(230,126,34,0.1)',
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: '#e67e22',
+            tension: 0.3,
+            fill: false,
+            yAxisID: 'y2',
+          }
+        ]
       },
       options: {
         responsive: true,
         plugins: {
-          legend: { display: false },
+          legend: { display: true, position: 'top' },
           tooltip: {
             callbacks: {
-              label: ctx => `${ctx.parsed.y.toLocaleString()} kcal`
+              label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()} kcal`
             }
           }
         },
         scales: {
           y: {
+            position: 'left',
             ticks: { callback: v => v.toLocaleString() },
             grid: { color: '#edf2f7' }
+          },
+          y2: {
+            position: 'right',
+            ticks: { callback: v => v.toLocaleString() },
+            grid: { drawOnChartArea: false }
           },
           x: { grid: { display: false } }
         }
