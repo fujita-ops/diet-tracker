@@ -331,9 +331,9 @@
 
     // 修正計画赤字/日（残り目標赤字 ÷ 残り日数）
     const totalDeficit = entries.reduce((sum, e) => sum + (e.deficit ?? (e.burn - e.intake)), 0);
-    const today = new Date();
+    const lastDate = new Date(last.date + 'T00:00:00');
     const endDate = new Date(END_DATE + 'T00:00:00');
-    const remainDays = Math.max(1, Math.ceil((endDate - today) / (1000 * 60 * 60 * 24)));
+    const remainDays = Math.max(1, Math.ceil((endDate - lastDate) / (1000 * 60 * 60 * 24)));
     const remainKcal = Math.max(0, GOAL_KCAL - totalDeficit);
     const planRevised = Math.round(remainKcal / remainDays);
     document.getElementById('val-plan-revised').textContent = planRevised.toLocaleString();
