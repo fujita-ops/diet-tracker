@@ -318,11 +318,25 @@
   function renderCards(entries) {
     if (!entries.length) return;
     const last = [...entries].sort((a, b) => a.date > b.date ? -1 : 1)[0];
-    document.getElementById('val-intake').textContent = last.intake?.toLocaleString() ?? '--';
-    document.getElementById('val-burn').textContent = last.burn?.toLocaleString() ?? '--';
-    const def = last.deficit ?? (last.burn - last.intake);
-    document.getElementById('val-deficit').textContent = def?.toLocaleString() ?? '--';
-    document.getElementById('val-weight').textContent = last.weight ?? '--';
+
+    // 直近体重・減量体重
+    const currentWeight = last.weight ?? '--';
+    const lost = last.weight != null ? Math.max(0, START_WEIGHT - last.weight).toFixed(1) : '--';
+    document.getElementById('val-current-weight').textContent = currentWeight;
+    document.getElementById('val-lost').textContent = lost;
+
+    // 当初計画赤字/日
+    const planOrig = Math.round(GOAL_KCAL / TOTAL_DAYS);
+    document.getElementById('val-plan-orig').textContent = planOrig.toLocaleString();
+
+    // 修正計画赤字/日（残り目標赤字 ÷ 残り日数）
+    const totalDeficit = entries.reduce((sum, e) => sum + (e.deficit ?? (e.burn - e.intake)), 0);
+    const today = new Date();
+    const endDate = new Date(END_DATE + 'T00:00:00');
+    const remainDays = Math.max(1, Math.ceil((endDate - today) / (1000 * 60 * 60 * 24)));
+    const remainKcal = Math.max(0, GOAL_KCAL - totalDeficit);
+    const planRevised = Math.round(remainKcal / remainDays);
+    document.getElementById('val-plan-revised').textContent = planRevised.toLocaleString();
   }
 
   function renderProgress(entries) {
