@@ -1,6 +1,37 @@
 {
   "entries": [
     {
+      "date": "2025-03-30",
+      "weight": 69.6,
+      "intake": 1700,
+      "exercise": [],
+      "burn": 2300,
+      "deficit": 600,
+      "memo": ""
+    },
+    {
+      "date": "2025-03-29",
+      "weight": 69.5,
+      "intake": 1900,
+      "exercise": [
+        {"name": "パデル1.5時間", "kcal": 0}
+      ],
+      "burn": 2500,
+      "deficit": 600,
+      "memo": ""
+    },
+    {
+      "date": "2025-03-28",
+      "weight": 69.4,
+      "intake": 2500,
+      "exercise": [
+        {"name": "パデル3時間", "kcal": 0}
+      ],
+      "burn": 3000,
+      "deficit": 500,
+      "memo": ""
+    },
+    {
       "date": "2025-03-27",
       "weight": 69.4,
       "intake": 1900,
